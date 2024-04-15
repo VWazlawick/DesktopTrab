@@ -1,23 +1,29 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
+
 package br.unipar.sistemavenda.model;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.ManyToOne;
 
-/**
- *
- * @author victo
- */
-//@Entity
+
+@Entity
 public class ItemVenda {
-    private Produto produto;
-    private Venda venda;
+    
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int id;
     private int qtd;
     private double vlUnit;
     private double vlTotal;
     private double descUnit;
+    
+    @ManyToOne
+    private Produto produto;
+    
+    @ManyToOne
+    private Venda venda;
 
     public ItemVenda() {
     }

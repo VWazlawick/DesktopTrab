@@ -4,6 +4,8 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
+import java.util.List;
 
 @Entity
 public class Produto {
@@ -13,12 +15,10 @@ public class Produto {
     private int id;
     private String descricao;
 
+    @OneToMany(mappedBy = "produto")
+    private List<ItemVenda> itensVenda;
+    
     public Produto() { }
-
-    public Produto(int id, String descricao) {
-        this.id = id;
-        this.descricao = descricao;
-    }
 
     public int getId() {
         return id;
@@ -35,4 +35,14 @@ public class Produto {
     public void setDescricao(String descricao) {
         this.descricao = descricao;
     }
+
+    public List<ItemVenda> getItensVenda() {
+        return itensVenda;
+    }
+
+    public void setItensVenda(List<ItemVenda> itensVenda) {
+        this.itensVenda = itensVenda;
+    }
+    
+    
 }

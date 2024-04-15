@@ -5,6 +5,8 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
+import java.util.List;
 
 @Entity
 public class Venda {
@@ -18,16 +20,20 @@ public class Venda {
     
     @ManyToOne
     private Cliente cliente;
-
+    
+    @OneToMany(mappedBy = "venda")
+    private List<ItemVenda> itensVenda;
+    
     public Venda() {
     }
 
-    public Venda(int id, Cliente cliente, double valorTotal, double descontoTotal, int qtdItens) {
+    public Venda(int id, double valorTotal, double descontoTotal, int qtdItens, Cliente cliente, List<ItemVenda> itensVenda) {
         this.id = id;
-        this.cliente = cliente;
         this.valorTotal = valorTotal;
         this.descontoTotal = descontoTotal;
         this.qtdItens = qtdItens;
+        this.cliente = cliente;
+        this.itensVenda = itensVenda;
     }
 
     public int getId() {
@@ -69,4 +75,13 @@ public class Venda {
     public void setQtdItens(int qtdItens) {
         this.qtdItens = qtdItens;
     }
+
+    public List<ItemVenda> getItensVenda() {
+        return itensVenda;
+    }
+
+    public void setItensVenda(List<ItemVenda> itensVenda) {
+        this.itensVenda = itensVenda;
+    }
+    
 }

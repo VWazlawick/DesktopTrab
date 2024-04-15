@@ -34,7 +34,13 @@ public class ClienteTableModel extends DefaultTableModel{
     }
     
     public Cliente getSelectedItem(JTable table, List<Cliente> clientes){
-        return null;
+        int itemSelecionado = table.getSelectedRow();
+        
+        if(itemSelecionado!=-1){
+            return clientes.get(itemSelecionado);
+        }else{
+            return null;
+        }
     }
    
     

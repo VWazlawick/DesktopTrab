@@ -4,12 +4,16 @@
  */
 package br.unipar.sistemavenda.panel;
 
+import br.unipar.sistemavenda.model.Cliente;
+import br.unipar.sistemavenda.model.ItemVenda;
 import br.unipar.sistemavenda.panel.PesquisarClientePanel;
 import br.unipar.sistemavenda.util.EntityManagerUtil;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.Panel;
 import java.awt.event.KeyEvent;
+import java.lang.reflect.Array;
+import java.util.ArrayList;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
@@ -18,14 +22,15 @@ import javax.swing.JPanel;
  * @author victo
  */
 public class VendaFrame extends javax.swing.JFrame {
-
-    /**
-     * Creates new form VendaFrame
-     */
+    
+    ArrayList<ItemVenda> lista = new ArrayList<>();
+    private Cliente cliente;
+    
     public VendaFrame() {
         initComponents();
         EntityManagerUtil.getEntityManagerFactory();
         getContentPane().setLayout(new BorderLayout());
+        
     }
 
     /**
@@ -38,7 +43,7 @@ public class VendaFrame extends javax.swing.JFrame {
     private void initComponents() {
 
         jLabel3 = new javax.swing.JLabel();
-        tfCliente1 = new javax.swing.JTextField();
+        tfProduto = new javax.swing.JTextField();
         btAddProduto = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         JTableProdutos = new javax.swing.JTable();
@@ -67,6 +72,12 @@ public class VendaFrame extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         jLabel3.setText("Produto:");
+
+        tfProduto.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                tfProdutoKeyReleased(evt);
+            }
+        });
 
         btAddProduto.setText("Adicionar");
         btAddProduto.addActionListener(new java.awt.event.ActionListener() {
@@ -140,6 +151,8 @@ public class VendaFrame extends javax.swing.JFrame {
 
         btRemover.setText("Remover");
 
+        tfIdVenda1.setEditable(false);
+
         btCancelar.setText("Cancelar");
         btCancelar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -166,7 +179,7 @@ public class VendaFrame extends javax.swing.JFrame {
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                                     .addComponent(tfCliente, javax.swing.GroupLayout.DEFAULT_SIZE, 200, Short.MAX_VALUE)
-                                    .addComponent(tfCliente1))
+                                    .addComponent(tfProduto))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(tfQtd, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -188,16 +201,16 @@ public class VendaFrame extends javax.swing.JFrame {
                                         .addComponent(btAddProduto))))
                             .addGroup(layout.createSequentialGroup()
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addGap(56, 56, 56)
-                                        .addComponent(tfIdVenda1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                                     .addComponent(tfQtdTotal, javax.swing.GroupLayout.PREFERRED_SIZE, 81, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addGroup(layout.createSequentialGroup()
                                         .addComponent(jLabel8)
                                         .addGap(20, 20, 20)
                                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                             .addComponent(jLabel9)
-                                            .addComponent(tfVlrTotal, javax.swing.GroupLayout.PREFERRED_SIZE, 81, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                                            .addComponent(tfVlrTotal, javax.swing.GroupLayout.PREFERRED_SIZE, 81, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addGap(56, 56, 56)
+                                        .addComponent(tfIdVenda1, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)))
                                 .addGap(28, 28, 28)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(jLabel10)
@@ -232,7 +245,7 @@ public class VendaFrame extends javax.swing.JFrame {
                 .addGap(3, 3, 3)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
                     .addComponent(jLabel3)
-                    .addComponent(tfCliente1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(tfProduto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(tfQtd, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(tfValorUnitario, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(tfDesconto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -264,7 +277,14 @@ public class VendaFrame extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btAddProdutoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btAddProdutoActionPerformed
-        // TODO add your handling code here:
+        ItemVenda iv = new ItemVenda();
+ 
+        iv.setDescUnit(Double.parseDouble(tfDesconto.getText()));
+        iv.setQtd(Integer.parseInt(tfQtd.getText()));
+        iv.setVlUnit(Double.parseDouble(tfValorUnitario.getText()));
+        iv.setVlTotal(Double.parseDouble(tfVlrTotalProd.getText()));
+        
+        lista.add(iv);
     }//GEN-LAST:event_btAddProdutoActionPerformed
 
     private void tfQtdTotalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tfQtdTotalActionPerformed
@@ -281,9 +301,13 @@ public class VendaFrame extends javax.swing.JFrame {
 
     private void tfClienteKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tfClienteKeyReleased
         if(evt.getKeyCode()==KeyEvent.VK_ENTER){
-            //JPanel clientePanel = new PesquisarClientePanel(tfCliente.getText());
-            JFrame clientePanel = new PesquisarClienteFrame(tfCliente.getText());
+            JPanel clientePanel = new PesquisarClientePanel(tfCliente.getText());
+            //JFrame clientePanel = new PesquisarClienteFrame(tfCliente.getText());
             abrirPanel(clientePanel);
+            cliente = ((PesquisarClientePanel)clientePanel).getClienteSelecionado();
+            if(cliente!=null){
+                tfCliente.setText(cliente.getNmCliente());
+            }
         }
     }//GEN-LAST:event_tfClienteKeyReleased
 
@@ -294,6 +318,15 @@ public class VendaFrame extends javax.swing.JFrame {
     private void btCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btCancelarActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_btCancelarActionPerformed
+
+    private void tfProdutoKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tfProdutoKeyReleased
+       if(evt.getKeyCode()==KeyEvent.VK_ENTER){
+            JPanel produtoPanel = new PesquisarProdutoPanel(tfProduto.getText());
+            //JFrame produtoFrame = new PesquisarProdutoFrame(tfProduto.getText());
+            abrirPanel(produtoPanel);
+            
+        }
+    }//GEN-LAST:event_tfProdutoKeyReleased
 
     /**
      * @param args the command line arguments
@@ -348,9 +381,9 @@ public class VendaFrame extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel9;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTextField tfCliente;
-    private javax.swing.JTextField tfCliente1;
     private javax.swing.JTextField tfDesconto;
     private javax.swing.JTextField tfIdVenda1;
+    private javax.swing.JTextField tfProduto;
     private javax.swing.JTextField tfQtd;
     private javax.swing.JTextField tfQtdTotal;
     private javax.swing.JTextField tfValorUnitario;
@@ -359,11 +392,13 @@ public class VendaFrame extends javax.swing.JFrame {
     private javax.swing.JTextField tfVlrTotalProd;
     // End of variables declaration//GEN-END:variables
 
-    private void abrirPanel(JFrame panel) {
-        panel.setSize(300,300);
-        getContentPane().add(panel);
-        revalidate();
-        repaint();
+    private void abrirPanel(JPanel panel) {
+        JFrame frame = new JFrame();
+        frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        frame.getContentPane().add(panel, BorderLayout.CENTER);
+        frame.pack();
+        frame.setLocationRelativeTo(null);
+        frame.setVisible(true);
         System.out.println("Abrir panel");
     }
 }

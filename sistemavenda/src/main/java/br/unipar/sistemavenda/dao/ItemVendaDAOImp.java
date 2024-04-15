@@ -4,6 +4,7 @@
  */
 package br.unipar.sistemavenda.dao;
 
+import br.unipar.sistemavenda.model.ItemVenda;
 import br.unipar.sistemavenda.model.Produto;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityTransaction;
@@ -13,69 +14,59 @@ import java.util.List;
  *
  * @author victo
  */
-public class ProdutoDAOImp implements ProdutoDAO{
-
+public class ItemVendaDAOImp implements ItemVendaDAO{
+    
     private EntityManager em;
 
-    public ProdutoDAOImp(EntityManager em) {
+    public ItemVendaDAOImp(EntityManager em) {
         this.em = em;
     }
     
-    
     @Override
-    public Produto insert(Produto produto) {
+    public ItemVenda insert(ItemVenda itemVenda) {
         EntityTransaction transaction = em.getTransaction();
         transaction.begin();
-        em.persist(produto);
+        em.persist(itemVenda);
         transaction.commit();
         em.close();
         
-        System.out.println("Produto cadastrado com sucesso!");
-        return produto;
+        System.out.println("ItemVenda cadastrado com sucesso!");
+        return itemVenda;
     }
 
     @Override
-    public Produto update(Produto produto) {
+    public ItemVenda update(ItemVenda itemVenda) {
         EntityTransaction transaction = em.getTransaction();
         transaction.begin();
-        em.merge(produto);
+        em.merge(itemVenda);
         transaction.commit();
         em.close();
         
-        System.out.println("Produto atualizado com sucesso!");
-        return produto;}
+        System.out.println("ItemVenda atualizado com sucesso!");
+        return itemVenda;
+    }
 
     @Override
-    public Boolean delete(Produto produto) {
+    public Boolean delete(ItemVenda itemVenda) {
         EntityTransaction transaction = em.getTransaction();
         try {
             transaction.begin();
-            em.remove(produto);
+            em.remove(itemVenda);
             transaction.commit();
             em.close();
 
-            System.out.println("Produto excluido com sucesso!");
+            System.out.println("ItemVenda excluido com sucesso!");
             return true;
         } catch (Exception e) {
             transaction.rollback();
-            System.out.println("Produto atualizado com sucesso!");
+            System.out.println("ItemVenda atualizado com sucesso!");
             return false;
         }
     }
 
     @Override
-    public Produto findById(Integer id) {
-        return em.find(Produto.class, id);
+    public List<ItemVenda> findAll() {
+        return em.createQuery("SELECET iv from ItemVenda iv", ItemVenda.class).getResultList();
     }
-
-    @Override
-    public List<Produto> findAll() {
-        return em.createQuery("SELECET p from Produto p", Produto.class).getResultList();
-    }
-
-    @Override
-    public List<Produto> findProduto(String dsProduto) {
-        return em.createQuery("SELECT p FROM Produto p WHERE p.descricao LIKE :dsproduto", 
-                Produto.class).setParameter("dsproduto", "%" + dsProduto + "%").getResultList();
-    }
+    
 }

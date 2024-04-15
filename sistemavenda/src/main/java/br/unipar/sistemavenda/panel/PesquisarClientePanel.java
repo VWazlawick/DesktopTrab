@@ -23,9 +23,15 @@ public class PesquisarClientePanel extends javax.swing.JPanel {
     /**
      * Creates new form PesquisarClienteFrame
      */
+    private ClienteTableModel model;
+    private Cliente cliente;
+    private List<Cliente> lista;
+    
     public PesquisarClientePanel(String nmCliente) {
         initComponents();  
         atualizarLista(nmCliente);
+        jTableCliente.setLayout(null);
+        btSelecionar.setLayout(null);
     }
 
     /**
@@ -38,12 +44,28 @@ public class PesquisarClientePanel extends javax.swing.JPanel {
     private void initComponents() {
 
         jPanel1 = new javax.swing.JPanel();
-        brSelecionar = new javax.swing.JButton();
+        btSelecionar = new javax.swing.JButton();
+        btCancelar = new javax.swing.JButton();
         jScrollPane2 = new javax.swing.JScrollPane();
         jTableCliente = new javax.swing.JTable();
-        btCancelar = new javax.swing.JButton();
 
-        brSelecionar.setText("Selecionar");
+        jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        btSelecionar.setText("Selecionar");
+        btSelecionar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btSelecionarActionPerformed(evt);
+            }
+        });
+        jPanel1.add(btSelecionar, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 270, -1, -1));
+
+        btCancelar.setText("Cancelar");
+        btCancelar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btCancelarActionPerformed(evt);
+            }
+        });
+        jPanel1.add(btCancelar, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 270, -1, -1));
 
         jTableCliente.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -59,30 +81,7 @@ public class PesquisarClientePanel extends javax.swing.JPanel {
         jTableCliente.setPreferredSize(new java.awt.Dimension(300, 300));
         jScrollPane2.setViewportView(jTableCliente);
 
-        btCancelar.setText("Cancelar");
-
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 400, Short.MAX_VALUE)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(brSelecionar)
-                .addGap(18, 18, 18)
-                .addComponent(btCancelar)
-                .addContainerGap())
-        );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 270, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(brSelecionar)
-                    .addComponent(btCancelar))
-                .addContainerGap())
-        );
+        jPanel1.add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 400, 300));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -96,24 +95,38 @@ public class PesquisarClientePanel extends javax.swing.JPanel {
         );
     }// </editor-fold>//GEN-END:initComponents
 
+    
+    private void btSelecionarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btSelecionarActionPerformed
+        cliente = model.getSelectedItem(jTableCliente, lista);
+        setVisible(false);
+    }//GEN-LAST:event_btSelecionarActionPerformed
+
+    private void btCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btCancelarActionPerformed
+        setVisible(false);
+    }//GEN-LAST:event_btCancelarActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton brSelecionar;
     private javax.swing.JButton btCancelar;
+    private javax.swing.JButton btSelecionar;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTable jTableCliente;
     // End of variables declaration//GEN-END:variables
 
     private void atualizarLista(String nmCliente) {
-        List<Cliente> lista = new ArrayList<>();
+        lista = new ArrayList<>();
         
         ClienteDAO clienteDao = new ClienteDAOImp(EntityManagerUtil.getMananger());
         
         lista.addAll(clienteDao.findCliente(nmCliente));
         
-        ClienteTableModel model = new ClienteTableModel(lista);
+        model = new ClienteTableModel(lista);
 
         jTableCliente.setModel(model);
+    }
+    
+    public Cliente getClienteSelecionado(){
+        return cliente;
     }
 }

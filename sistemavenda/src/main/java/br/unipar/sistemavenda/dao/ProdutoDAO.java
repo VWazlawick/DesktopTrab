@@ -18,4 +18,5 @@ public interface ProdutoDAO {
     
     Produto findById(Integer id); 
     List<Produto> findAll();
+    List<Produto> findProduto(String dsProduto);
 }

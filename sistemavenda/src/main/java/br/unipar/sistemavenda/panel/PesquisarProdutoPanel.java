@@ -4,6 +4,14 @@
  */
 package br.unipar.sistemavenda.panel;
 
+import br.unipar.sistemavenda.dao.ProdutoDAO;
+import br.unipar.sistemavenda.dao.ProdutoDAOImp;
+import br.unipar.sistemavenda.model.Produto;
+import br.unipar.sistemavenda.tablemodels.ProdutoTableModel;
+import br.unipar.sistemavenda.util.EntityManagerUtil;
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  *
  * @author victo
@@ -13,8 +21,13 @@ public class PesquisarProdutoPanel extends javax.swing.JPanel {
     /**
      * Creates new form PesquisarProdutoPanel
      */
+    
     public PesquisarProdutoPanel() {
+    }
+
+    public PesquisarProdutoPanel(String dsProduto) {
         initComponents();
+        atualizarLista(dsProduto);
     }
 
     /**
@@ -26,8 +39,14 @@ public class PesquisarProdutoPanel extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jFrame1 = new javax.swing.JFrame();
+        jPanel1 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTableProduto = new javax.swing.JTable();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        jTableProduto1 = new javax.swing.JTable();
+
+        jFrame1.setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         jTableProduto.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -42,21 +61,83 @@ public class PesquisarProdutoPanel extends javax.swing.JPanel {
         ));
         jScrollPane1.setViewportView(jTableProduto);
 
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 400, Short.MAX_VALUE)
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 300, Short.MAX_VALUE)
+        );
+
+        javax.swing.GroupLayout jFrame1Layout = new javax.swing.GroupLayout(jFrame1.getContentPane());
+        jFrame1.getContentPane().setLayout(jFrame1Layout);
+        jFrame1Layout.setHorizontalGroup(
+            jFrame1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 400, Short.MAX_VALUE)
+            .addGroup(jFrame1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(jFrame1Layout.createSequentialGroup()
+                    .addGap(0, 0, Short.MAX_VALUE)
+                    .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGap(0, 0, Short.MAX_VALUE)))
+        );
+        jFrame1Layout.setVerticalGroup(
+            jFrame1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 300, Short.MAX_VALUE)
+            .addGroup(jFrame1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(jFrame1Layout.createSequentialGroup()
+                    .addGap(0, 0, Short.MAX_VALUE)
+                    .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGap(0, 0, Short.MAX_VALUE)))
+        );
+
+        jTableProduto1.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        jScrollPane2.setViewportView(jTableProduto1);
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 400, Short.MAX_VALUE)
+            .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 400, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 300, Short.MAX_VALUE)
+            .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 300, Short.MAX_VALUE)
         );
     }// </editor-fold>//GEN-END:initComponents
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JFrame jFrame1;
+    private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTable jTableProduto;
+    private javax.swing.JTable jTableProduto1;
     // End of variables declaration//GEN-END:variables
+
+    private void atualizarLista(String dsProduto) {
+    
+    List<Produto> lista = new ArrayList<>();
+
+        ProdutoDAO produtoDao = new ProdutoDAOImp(EntityManagerUtil.getMananger());
+        
+        lista.addAll(produtoDao.findProduto(dsProduto));
+        
+        ProdutoTableModel model = new ProdutoTableModel(lista);
+
+        jTableProduto.setModel(model);
+    }
 }
