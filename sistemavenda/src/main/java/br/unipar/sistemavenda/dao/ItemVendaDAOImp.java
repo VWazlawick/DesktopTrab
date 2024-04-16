@@ -28,7 +28,7 @@ public class ItemVendaDAOImp implements ItemVendaDAO{
         transaction.begin();
         em.persist(itemVenda);
         transaction.commit();
-        em.close();
+        //em.close();
         
         System.out.println("ItemVenda cadastrado com sucesso!");
         return itemVenda;

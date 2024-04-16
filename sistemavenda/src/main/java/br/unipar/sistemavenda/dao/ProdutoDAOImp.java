@@ -70,7 +70,7 @@ public class ProdutoDAOImp implements ProdutoDAO{
 
     @Override
     public List<Produto> findAll() {
-        return em.createQuery("SELECET p from Produto p", Produto.class).getResultList();
+        return em.createQuery("SELECT p from Produto p", Produto.class).getResultList();
     }
 
     @Override

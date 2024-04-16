@@ -28,7 +28,7 @@ public class VendaDAOImp implements VendaDAO{
         transaction.begin();
         em.persist(venda);
         transaction.commit();
-        em.close();
+        //em.close();
         
         System.out.println("Venda realizada com sucesso!");
         return venda;

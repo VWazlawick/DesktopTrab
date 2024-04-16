@@ -1,5 +1,7 @@
+br\unipar\sistemavenda\panel\PesquisarProdutoPanel$2.class
 br\unipar\sistemavenda\tablemodels\ClienteTableModel.class
 br\unipar\sistemavenda\panel\PesquisarClientePanel$2.class
+br\unipar\sistemavenda\panel\VendaFrame$11.class
 br\unipar\sistemavenda\dao\ItemVendaDAO.class
 br\unipar\sistemavenda\model\Cliente.class
 br\unipar\sistemavenda\panel\VendaFrame$5.class
@@ -9,7 +11,10 @@ br\unipar\sistemavenda\model\Venda.class
 br\unipar\sistemavenda\dao\VendaDAO.class
 br\unipar\sistemavenda\dao\ProdutoDAOImp.class
 br\unipar\sistemavenda\dao\ItemVendaDAOImp.class
+br\unipar\sistemavenda\panel\VendaFrame$13.class
 br\unipar\sistemavenda\tablemodels\ProdutoTableModel.class
+br\unipar\sistemavenda\panel\PesquisarProdutoPanel$1.class
+br\unipar\sistemavenda\panel\VendaFrame$10.class
 br\unipar\sistemavenda\panel\VendaFrame$2.class
 br\unipar\sistemavenda\dao\VendaDAOImp.class
 br\unipar\sistemavenda\model\ItemVenda.class
@@ -18,10 +23,12 @@ br\unipar\sistemavenda\dao\ProdutoDAO.class
 br\unipar\sistemavenda\panel\PesquisarClientePanel$1.class
 br\unipar\sistemavenda\panel\VendaFrame$4.class
 br\unipar\sistemavenda\panel\PesquisarProdutoPanel.class
+br\unipar\sistemavenda\panel\VendaFrame$12.class
 br\unipar\sistemavenda\panel\VendaFrame.class
 br\unipar\sistemavenda\util\EntityManagerUtil.class
 br\unipar\sistemavenda\panel\VendaFrame$9.class
 br\unipar\sistemavenda\panel\VendaFrame$1.class
+br\unipar\sistemavenda\tablemodels\ItemVendaTableModel.class
 br\unipar\sistemavenda\Sistemavenda.class
 br\unipar\sistemavenda\panel\VendaFrame$8.class
 br\unipar\sistemavenda\dao\ClienteDAO.class

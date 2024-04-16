@@ -1,33 +1,30 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JPanel.java to edit this template
- */
 package br.unipar.sistemavenda.panel;
 
+import br.unipar.sistemavenda.dao.ClienteDAO;
+import br.unipar.sistemavenda.dao.ClienteDAOImp;
 import br.unipar.sistemavenda.dao.ProdutoDAO;
 import br.unipar.sistemavenda.dao.ProdutoDAOImp;
+import br.unipar.sistemavenda.model.Cliente;
 import br.unipar.sistemavenda.model.Produto;
 import br.unipar.sistemavenda.tablemodels.ProdutoTableModel;
 import br.unipar.sistemavenda.util.EntityManagerUtil;
 import java.util.ArrayList;
 import java.util.List;
+import javax.swing.SwingUtilities;
 
-/**
- *
- * @author victo
- */
+
 public class PesquisarProdutoPanel extends javax.swing.JPanel {
 
-    /**
-     * Creates new form PesquisarProdutoPanel
-     */
+    private VendaFrame vendaFrame = null;
+    private Produto produto;
+    private ProdutoTableModel model;
+    private List<Produto> lista;
     
-    public PesquisarProdutoPanel() {
-    }
-
-    public PesquisarProdutoPanel(String dsProduto) {
+    public PesquisarProdutoPanel(VendaFrame vendaFrame, String dsProduto) {
+        this.vendaFrame = vendaFrame;
         initComponents();
         atualizarLista(dsProduto);
+
     }
 
     /**
@@ -43,8 +40,10 @@ public class PesquisarProdutoPanel extends javax.swing.JPanel {
         jPanel1 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTableProduto = new javax.swing.JTable();
-        jScrollPane2 = new javax.swing.JScrollPane();
-        jTableProduto1 = new javax.swing.JTable();
+        btSelecionar = new javax.swing.JButton();
+        btCancelar = new javax.swing.JButton();
+        jScrollPane3 = new javax.swing.JScrollPane();
+        jTableProdutos = new javax.swing.JTable();
 
         jFrame1.setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -93,7 +92,32 @@ public class PesquisarProdutoPanel extends javax.swing.JPanel {
                     .addGap(0, 0, Short.MAX_VALUE)))
         );
 
-        jTableProduto1.setModel(new javax.swing.table.DefaultTableModel(
+        setAlignmentX(0.0F);
+        setAlignmentY(0.0F);
+        setAutoscrolls(true);
+        setMinimumSize(new java.awt.Dimension(400, 300));
+        setPreferredSize(new java.awt.Dimension(400, 305));
+        setLayout(null);
+
+        btSelecionar.setText("Seleionar");
+        btSelecionar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btSelecionarActionPerformed(evt);
+            }
+        });
+        add(btSelecionar);
+        btSelecionar.setBounds(220, 280, 78, 23);
+
+        btCancelar.setText("Cancelar");
+        btCancelar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btCancelarActionPerformed(evt);
+            }
+        });
+        add(btCancelar);
+        btCancelar.setBounds(310, 280, 76, 23);
+
+        jTableProdutos.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
                 {null, null, null, null},
@@ -104,40 +128,50 @@ public class PesquisarProdutoPanel extends javax.swing.JPanel {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
-        jScrollPane2.setViewportView(jTableProduto1);
+        jTableProdutos.setPreferredSize(new java.awt.Dimension(300, 300));
+        jScrollPane3.setViewportView(jTableProdutos);
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
-        this.setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 400, Short.MAX_VALUE)
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 300, Short.MAX_VALUE)
-        );
+        add(jScrollPane3);
+        jScrollPane3.setBounds(0, 0, 400, 310);
     }// </editor-fold>//GEN-END:initComponents
+
+    private void btSelecionarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btSelecionarActionPerformed
+        produto = model.getSelectedItem(jTableProdutos, lista);
+        getProdutoSelecionado();
+        SwingUtilities.getWindowAncestor(this).dispose();
+    }//GEN-LAST:event_btSelecionarActionPerformed
+
+    private void btCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btCancelarActionPerformed
+        SwingUtilities.getWindowAncestor(this).dispose();
+    }//GEN-LAST:event_btCancelarActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btCancelar;
+    private javax.swing.JButton btSelecionar;
     private javax.swing.JFrame jFrame1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JTable jTableProduto;
-    private javax.swing.JTable jTableProduto1;
+    private javax.swing.JTable jTableProdutos;
     // End of variables declaration//GEN-END:variables
 
     private void atualizarLista(String dsProduto) {
     
-    List<Produto> lista = new ArrayList<>();
+        lista = new ArrayList<>();
 
         ProdutoDAO produtoDao = new ProdutoDAOImp(EntityManagerUtil.getMananger());
         
         lista.addAll(produtoDao.findProduto(dsProduto));
         
-        ProdutoTableModel model = new ProdutoTableModel(lista);
+        model = new ProdutoTableModel(lista);
 
-        jTableProduto.setModel(model);
+        jTableProdutos.setModel(model);
+    }
+
+    private Produto getProdutoSelecionado() {
+        vendaFrame.retornarProduto(produto);
+        return produto;
     }
 }

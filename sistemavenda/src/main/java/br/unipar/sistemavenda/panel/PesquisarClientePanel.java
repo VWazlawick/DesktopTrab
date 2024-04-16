@@ -1,7 +1,4 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JPanel.java to edit this template
- */
+
 package br.unipar.sistemavenda.panel;
 
 import br.unipar.sistemavenda.dao.ClienteDAO;
@@ -9,29 +6,23 @@ import br.unipar.sistemavenda.dao.ClienteDAOImp;
 import br.unipar.sistemavenda.model.Cliente;
 import br.unipar.sistemavenda.tablemodels.ClienteTableModel;
 import br.unipar.sistemavenda.util.EntityManagerUtil;
-import java.awt.Color;
-import java.awt.Dimension;
 import java.util.ArrayList;
 import java.util.List;
+import javax.swing.SwingUtilities;
 
-/**
- *
- * @author victo
- */
+
 public class PesquisarClientePanel extends javax.swing.JPanel {
 
-    /**
-     * Creates new form PesquisarClienteFrame
-     */
+   
     private ClienteTableModel model;
     private Cliente cliente;
     private List<Cliente> lista;
+    VendaFrame vendaFrame = null;
     
-    public PesquisarClientePanel(String nmCliente) {
+    public PesquisarClientePanel(VendaFrame vendaFrame, String nmCliente) {
+        this.vendaFrame = vendaFrame;
         initComponents();  
         atualizarLista(nmCliente);
-        jTableCliente.setLayout(null);
-        btSelecionar.setLayout(null);
     }
 
     /**
@@ -81,7 +72,7 @@ public class PesquisarClientePanel extends javax.swing.JPanel {
         jTableCliente.setPreferredSize(new java.awt.Dimension(300, 300));
         jScrollPane2.setViewportView(jTableCliente);
 
-        jPanel1.add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 400, 300));
+        jPanel1.add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 400, 320));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -98,11 +89,13 @@ public class PesquisarClientePanel extends javax.swing.JPanel {
     
     private void btSelecionarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btSelecionarActionPerformed
         cliente = model.getSelectedItem(jTableCliente, lista);
-        setVisible(false);
+        getClienteSelecionado();
+        SwingUtilities.getWindowAncestor(this).dispose(); 
     }//GEN-LAST:event_btSelecionarActionPerformed
 
     private void btCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btCancelarActionPerformed
-        setVisible(false);
+        SwingUtilities.getWindowAncestor(this).dispose();
+        System.out.println("Fechar Frame");
     }//GEN-LAST:event_btCancelarActionPerformed
 
 
@@ -127,6 +120,7 @@ public class PesquisarClientePanel extends javax.swing.JPanel {
     }
     
     public Cliente getClienteSelecionado(){
+        vendaFrame.retornarCliente(cliente);
         return cliente;
     }
 }

@@ -6,6 +6,7 @@ package br.unipar.sistemavenda.tablemodels;
 
 import br.unipar.sistemavenda.model.Produto;
 import java.util.List;
+import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -27,5 +28,13 @@ public class ProdutoTableModel extends DefaultTableModel{
             });
         }
     }
-    
+    public Produto getSelectedItem(JTable table, List<Produto> produtos){
+        int itemSelecionado = table.getSelectedRow();
+        
+        if(itemSelecionado!=-1){
+            return produtos.get(itemSelecionado);
+        }else{
+            return null;
+        }
+    }
 }
