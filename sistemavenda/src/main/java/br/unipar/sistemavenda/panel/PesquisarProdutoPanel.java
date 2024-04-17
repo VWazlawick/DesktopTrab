@@ -95,19 +95,22 @@ public class PesquisarProdutoPanel extends javax.swing.JPanel {
         setAlignmentX(0.0F);
         setAlignmentY(0.0F);
         setAutoscrolls(true);
-        setMinimumSize(new java.awt.Dimension(400, 300));
-        setPreferredSize(new java.awt.Dimension(400, 305));
+        setMinimumSize(new java.awt.Dimension(0, 0));
+        setPreferredSize(new java.awt.Dimension(500, 400));
         setLayout(null);
 
-        btSelecionar.setText("Seleionar");
+        btSelecionar.setBackground(new java.awt.Color(0, 255, 0));
+        btSelecionar.setText("Selecionar");
+        btSelecionar.setToolTipText("");
         btSelecionar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btSelecionarActionPerformed(evt);
             }
         });
         add(btSelecionar);
-        btSelecionar.setBounds(220, 280, 78, 23);
+        btSelecionar.setBounds(270, 365, 100, 30);
 
+        btCancelar.setBackground(new java.awt.Color(184, 20, 20));
         btCancelar.setText("Cancelar");
         btCancelar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -115,8 +118,9 @@ public class PesquisarProdutoPanel extends javax.swing.JPanel {
             }
         });
         add(btCancelar);
-        btCancelar.setBounds(310, 280, 76, 23);
+        btCancelar.setBounds(390, 365, 100, 30);
 
+        jTableProdutos.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         jTableProdutos.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
@@ -128,11 +132,14 @@ public class PesquisarProdutoPanel extends javax.swing.JPanel {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
-        jTableProdutos.setPreferredSize(new java.awt.Dimension(300, 300));
+        jTableProdutos.setMaximumSize(new java.awt.Dimension(2147483647, 12257454));
+        jTableProdutos.setMinimumSize(new java.awt.Dimension(0, 0));
+        jTableProdutos.setPreferredSize(new java.awt.Dimension(500, 400));
+        jTableProdutos.setRowHeight(25);
         jScrollPane3.setViewportView(jTableProdutos);
 
         add(jScrollPane3);
-        jScrollPane3.setBounds(0, 0, 400, 310);
+        jScrollPane3.setBounds(0, 0, 500, 360);
     }// </editor-fold>//GEN-END:initComponents
 
     private void btSelecionarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btSelecionarActionPerformed

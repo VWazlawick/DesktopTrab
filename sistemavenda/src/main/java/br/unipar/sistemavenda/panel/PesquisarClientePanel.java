@@ -42,22 +42,25 @@ public class PesquisarClientePanel extends javax.swing.JPanel {
 
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
+        btSelecionar.setBackground(new java.awt.Color(0, 255, 0));
         btSelecionar.setText("Selecionar");
         btSelecionar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btSelecionarActionPerformed(evt);
             }
         });
-        jPanel1.add(btSelecionar, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 270, -1, -1));
+        jPanel1.add(btSelecionar, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 365, 100, 30));
 
+        btCancelar.setBackground(new java.awt.Color(184, 20, 20));
         btCancelar.setText("Cancelar");
         btCancelar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btCancelarActionPerformed(evt);
             }
         });
-        jPanel1.add(btCancelar, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 270, -1, -1));
+        jPanel1.add(btCancelar, new org.netbeans.lib.awtextra.AbsoluteConstraints(390, 365, 100, 30));
 
+        jTableCliente.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         jTableCliente.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
@@ -70,19 +73,24 @@ public class PesquisarClientePanel extends javax.swing.JPanel {
             }
         ));
         jTableCliente.setPreferredSize(new java.awt.Dimension(300, 300));
+        jTableCliente.setRowHeight(25);
         jScrollPane2.setViewportView(jTableCliente);
 
-        jPanel1.add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 400, 320));
+        jPanel1.add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 500, 400));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 500, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 401, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
 
