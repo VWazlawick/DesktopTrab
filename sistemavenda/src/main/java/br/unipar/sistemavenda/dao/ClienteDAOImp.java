@@ -77,7 +77,7 @@ public class ClienteDAOImp implements ClienteDAO {
     
     @Override
     public List<Cliente> findCliente(String nmCliente){
-        return em.createQuery("SELECT c FROM Cliente c WHERE c.nmCliente LIKE :nmCliente", 
+        return em.createQuery("SELECT c FROM Cliente c WHERE LOWER(c.nmCliente) LIKE :nmCliente", 
                 Cliente.class).setParameter("nmCliente","%" + nmCliente + "%").getResultList();
     }
 }

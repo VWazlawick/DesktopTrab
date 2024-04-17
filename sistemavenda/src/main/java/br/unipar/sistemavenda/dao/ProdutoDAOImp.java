@@ -75,7 +75,7 @@ public class ProdutoDAOImp implements ProdutoDAO{
 
     @Override
     public List<Produto> findProduto(String dsProduto) {
-        return em.createQuery("SELECT p FROM Produto p WHERE p.descricao LIKE :dsproduto", 
+        return em.createQuery("SELECT p FROM Produto p WHERE LOWER(p.descricao) LIKE :dsproduto", 
                 Produto.class).setParameter("dsproduto", "%" + dsProduto + "%").getResultList();
     }
 }

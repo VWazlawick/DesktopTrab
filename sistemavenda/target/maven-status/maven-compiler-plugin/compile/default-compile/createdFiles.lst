@@ -20,6 +20,7 @@ br\unipar\sistemavenda\dao\VendaDAOImp.class
 br\unipar\sistemavenda\model\ItemVenda.class
 br\unipar\sistemavenda\panel\VendaFrame$7.class
 br\unipar\sistemavenda\dao\ProdutoDAO.class
+br\unipar\sistemavenda\Exception\ValidacaoException.class
 br\unipar\sistemavenda\panel\PesquisarClientePanel$1.class
 br\unipar\sistemavenda\panel\VendaFrame$4.class
 br\unipar\sistemavenda\panel\PesquisarProdutoPanel.class
@@ -30,6 +31,7 @@ br\unipar\sistemavenda\panel\VendaFrame$9.class
 br\unipar\sistemavenda\panel\VendaFrame$1.class
 br\unipar\sistemavenda\tablemodels\ItemVendaTableModel.class
 br\unipar\sistemavenda\Sistemavenda.class
+br\unipar\sistemavenda\panel\VendaFrame$14.class
 br\unipar\sistemavenda\panel\VendaFrame$8.class
 br\unipar\sistemavenda\dao\ClienteDAO.class
 br\unipar\sistemavenda\dao\ClienteDAOImp.class

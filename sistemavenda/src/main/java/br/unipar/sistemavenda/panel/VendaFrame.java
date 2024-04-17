@@ -4,6 +4,7 @@
  */
 package br.unipar.sistemavenda.panel;
 
+import br.unipar.sistemavenda.Exception.ValidacaoException;
 import br.unipar.sistemavenda.dao.ItemVendaDAO;
 import br.unipar.sistemavenda.dao.ItemVendaDAOImp;
 import br.unipar.sistemavenda.dao.VendaDAO;
@@ -22,7 +23,10 @@ import java.awt.Panel;
 import java.awt.event.KeyEvent;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 
@@ -42,7 +46,7 @@ public class VendaFrame extends javax.swing.JFrame {
         initComponents();
         EntityManagerUtil.getEntityManagerFactory();
         getContentPane().setLayout(new BorderLayout());
- 
+        atualizarValorPadrão();
     }
 
     /**
@@ -157,6 +161,11 @@ public class VendaFrame extends javax.swing.JFrame {
         tfVlrDesconto.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 tfVlrDescontoActionPerformed(evt);
+            }
+        });
+        tfVlrDesconto.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                tfVlrDescontoKeyReleased(evt);
             }
         });
 
@@ -319,26 +328,23 @@ public class VendaFrame extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btAddProdutoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btAddProdutoActionPerformed
-        ItemVenda iv = new ItemVenda();
+        try {
+            validarCamposProduto();
+            ItemVenda iv = new ItemVenda();
  
-        iv.setDescUnit(Double.parseDouble(tfDesconto.getText()));
-        iv.setQtd(Integer.parseInt(tfQtd.getText()));
-        iv.setVlUnit(Double.parseDouble(tfValorUnitario.getText()));
-        iv.setVlTotal(Double.parseDouble(tfVlrTotalProd.getText()));
-        iv.setProduto(produto);
-        
-        listaProdutos.add(iv);
-        
-        produto = null;
-        tfDesconto.setText("");
-        tfQtd.setText("");
-        tfValorUnitario.setText("");
-        tfVlrTotalProd.setText("");
-        tfProduto.setText("");
-        
-        atualizarCampos();
-        
-        atualizarListaProdutos();
+            iv.setDescUnit(Double.parseDouble(tfDesconto.getText()));
+            iv.setQtd(Integer.parseInt(tfQtd.getText()));
+            iv.setVlUnit(Double.parseDouble(tfValorUnitario.getText()));
+            iv.setVlTotal(Double.parseDouble(tfVlrTotalProd.getText()));
+            iv.setProduto(produto);
+
+            listaProdutos.add(iv);
+
+            atualizarValorPadrão();
+            atualizarCampos();
+            atualizarListaProdutos();
+        } catch (ValidacaoException ex) {
+        }   
     }//GEN-LAST:event_btAddProdutoActionPerformed
 
     private void tfQtdTotalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tfQtdTotalActionPerformed
@@ -355,13 +361,17 @@ public class VendaFrame extends javax.swing.JFrame {
 
     private void tfClienteKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tfClienteKeyReleased
         if(evt.getKeyCode()==KeyEvent.VK_ENTER){
-            JPanel clientePanel = new PesquisarClientePanel(this, tfCliente.getText());
+            JPanel clientePanel = new PesquisarClientePanel(this, tfCliente.getText().toLowerCase());
             abrirPanel(clientePanel);
         }
     }//GEN-LAST:event_tfClienteKeyReleased
 
     private void btFinalizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btFinalizarActionPerformed
-        finalizarVenda();
+        try {
+            validarCamposVenda();
+            finalizarVenda();
+        } catch (ValidacaoException ex) {
+        }
     }//GEN-LAST:event_btFinalizarActionPerformed
 
     private void btCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btCancelarActionPerformed
@@ -370,7 +380,7 @@ public class VendaFrame extends javax.swing.JFrame {
 
     private void tfProdutoKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tfProdutoKeyReleased
        if(evt.getKeyCode()==KeyEvent.VK_ENTER){
-            JPanel produtoPanel = new PesquisarProdutoPanel(this, tfProduto.getText());
+            JPanel produtoPanel = new PesquisarProdutoPanel(this, tfProduto.getText().toLowerCase());
             abrirPanel(produtoPanel);
         }
     }//GEN-LAST:event_tfProdutoKeyReleased
@@ -394,7 +404,12 @@ public class VendaFrame extends javax.swing.JFrame {
     private void btRemoverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btRemoverActionPerformed
        listaProdutos.remove(model.getSelectedItem(JTableProdutos, listaProdutos));
        atualizarListaProdutos();
+       atualizarCampos();
     }//GEN-LAST:event_btRemoverActionPerformed
+
+    private void tfVlrDescontoKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tfVlrDescontoKeyReleased
+        atualizarDesconto(Double.parseDouble(tfVlrDesconto.getText()));
+    }//GEN-LAST:event_tfVlrDescontoKeyReleased
 
     /**
      * @param args the command line arguments
@@ -504,26 +519,27 @@ public class VendaFrame extends javax.swing.JFrame {
         int qtdTotal=0;
         
         for(int i = 0; i<listaProdutos.size(); i++){
-            vlrTotal += listaProdutos.get(i).getVlTotal();
+            vlrTotal += (listaProdutos.get(i).getVlUnit()) * (listaProdutos.get(i).getQtd());
             dscTotal += listaProdutos.get(i).getDescUnit();
             qtdTotal += listaProdutos.get(i).getQtd();
         }
+
+        atualizarDesconto(dscTotal);
         tfQtdTotal.setText(String.valueOf(qtdTotal));
-        tfVlrTotal.setText(String.valueOf(vlrTotal));
         tfVlrDesconto.setText(String.valueOf(dscTotal));
     }
 
     private void limparTudo() {
         tfCliente.setText("");
-        tfDesconto.setText("");
+        tfDesconto.setText("0");
         tfIdVenda1.setText("");
         tfProduto.setText("");
-        tfQtd.setText("");
-        tfQtdTotal.setText("");
-        tfValorUnitario.setText("");
-        tfVlrDesconto.setText("");
-        tfVlrTotal.setText("");
-        tfVlrTotalProd.setText("");
+        tfQtd.setText("0");
+        tfQtdTotal.setText("0");
+        tfValorUnitario.setText("0");
+        tfVlrDesconto.setText("0");
+        tfVlrTotal.setText("0");
+        tfVlrTotalProd.setText("0");
         cliente = null;
         produto = null;
         
@@ -551,5 +567,80 @@ public class VendaFrame extends javax.swing.JFrame {
         }
         limparTudo();
         em.close();
+    }
+
+    private void validarCamposVenda() throws ValidacaoException {
+        if(cliente==null){
+            tfCliente.requestFocus();
+            JOptionPane.showMessageDialog(null,"Informe o cliente", "Atenção",
+                    JOptionPane.WARNING_MESSAGE,null);
+            throw new ValidacaoException("Informe um cliente!");
+        }
+        if(listaProdutos.isEmpty()){
+            tfProduto.requestFocus();
+            JOptionPane.showMessageDialog(null,"Informe ao menos um produto", "Atenção",
+                    JOptionPane.WARNING_MESSAGE,null);
+            throw new ValidacaoException("Informe os produtos!");
+        }
+        
+    }
+
+    private void validarCamposProduto() throws ValidacaoException {
+        if(produto==null){
+            tfProduto.requestFocus();
+            JOptionPane.showMessageDialog(null,"Informe um produto", "Atenção",
+                    JOptionPane.WARNING_MESSAGE,null);
+            throw new ValidacaoException("Informe um produto!");
+        }
+        if(tfValorUnitario.getText().isBlank() || tfValorUnitario.getText().isEmpty()){
+            tfValorUnitario.requestFocus();
+            JOptionPane.showMessageDialog(null,"Informe o valor", "Atenção",
+                    JOptionPane.WARNING_MESSAGE,null);
+            throw new ValidacaoException("Informe um valor unitário!");
+        }
+        if(tfQtd.getText().isBlank() || tfQtd.getText().isEmpty()){
+            tfQtd.requestFocus();
+            JOptionPane.showMessageDialog(null,"Informe a Quantidade", "Atenção",
+                    JOptionPane.WARNING_MESSAGE,null);
+            throw new ValidacaoException("Informe a quantidade!");
+        }
+        if(tfDesconto.getText().isBlank() || tfDesconto.getText().isEmpty()){
+            tfDesconto.requestFocus();
+            JOptionPane.showMessageDialog(null,"Informe o desconto", "Atenção",
+                    JOptionPane.WARNING_MESSAGE,null);
+            throw new ValidacaoException("Informe o Desconto");
+        }
+        if(tfQtd.getText().equals("0")){
+            tfQtd.requestFocus();
+            JOptionPane.showMessageDialog(null,"Informe a Quantidade", "Atenção",
+                    JOptionPane.WARNING_MESSAGE,null);
+            throw new ValidacaoException("Informe mais de 0 quantidade!");
+        }
+        if(tfValorUnitario.getText().equals("0")){
+            tfValorUnitario.requestFocus();
+            JOptionPane.showMessageDialog(null,"Informe o valor", "Atenção",
+                    JOptionPane.WARNING_MESSAGE,null);
+            throw new ValidacaoException("Informe um valor!");
+        }
+    }
+
+    private void atualizarValorPadrão() {
+        produto = null;
+        tfDesconto.setText("0");
+        tfQtd.setText("0");
+        tfValorUnitario.setText("0");
+        tfVlrTotalProd.setText("0");
+        tfProduto.setText("");
+    }
+
+    private void atualizarDesconto(double vlrDesconto) {
+        double vlrTotal=0; 
+        
+        for(int i = 0; i<listaProdutos.size(); i++){
+            vlrTotal += (listaProdutos.get(i).getVlUnit()) * (listaProdutos.get(i).getQtd());
+
+        }
+        vlrTotal = vlrTotal - vlrDesconto;
+        tfVlrTotal.setText(String.valueOf(vlrTotal));
     }
 }
